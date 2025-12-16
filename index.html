@@ -82,7 +82,7 @@
         // Function to calculate unit price (단가)
         function calculateUnitPrice(amount, quantity) {
             if (quantity === 0 || quantity === null || quantity === undefined) {
-                return 0;
+                return null;
             }
             return amount / quantity;
         }
@@ -136,7 +136,10 @@
                     
                     if (col.type === 'text') {
                         displayValue = value;
-                    } else if (col.type === 'number' || col.type === 'calculated') {
+                    } else if (col.type === 'calculated') {
+                        // Handle null values for unit price (division by zero)
+                        displayValue = value === null ? 'N/A' : formatNumber(value.toFixed(2));
+                    } else if (col.type === 'number') {
                         displayValue = formatNumber(Math.round(value));
                     }
                     
