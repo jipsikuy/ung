@@ -75,7 +75,13 @@
         ];
 
         // Function to format numbers with thousand separators
-        function formatNumber(num) {
+        function formatNumber(num, decimals) {
+            if (decimals !== undefined) {
+                return num.toLocaleString('ko-KR', {
+                    minimumFractionDigits: decimals,
+                    maximumFractionDigits: decimals
+                });
+            }
             return num.toLocaleString('ko-KR');
         }
 
@@ -138,9 +144,9 @@
                         displayValue = value;
                     } else if (col.type === 'calculated') {
                         // Handle null values for unit price (division by zero)
-                        displayValue = value === null ? 'N/A' : formatNumber(value.toFixed(2));
+                        displayValue = value === null ? 'N/A' : formatNumber(value, 2);
                     } else if (col.type === 'number') {
-                        displayValue = formatNumber(Math.round(value));
+                        displayValue = formatNumber(value);
                     }
                     
                     tableHTML += `<td class="${col.className}">${displayValue}</td>`;
