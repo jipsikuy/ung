@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year-over-Year Data Table with Unit Price</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: right;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+        .item-name {
+            text-align: left;
+        }
+        .amount-col {
+            background-color: #e8f4f8;
+        }
+        .price-col {
+            background-color: #fff4e8;
+        }
+        .quantity-col {
+            background-color: #f0f8e8;
+        }
+    </style>
+</head>
+<body>
+    <h1>년도별 데이터 (Year-over-Year Data)</h1>
+    <div id="table-container"></div>
+
+    <script>
+        // Sample data for demonstration
+        const sampleData = [
+            {
+                name: '품목 A',
+                당해년_금액: 1000000,
+                당해년_빈입량: 500,
+                전년_금액: 900000,
+                전년_빈입량: 450,
+                평년_금액: 850000,
+                평년_빈입량: 425
+            },
+            {
+                name: '품목 B',
+                당해년_금액: 2500000,
+                당해년_빈입량: 1000,
+                전년_금액: 2200000,
+                전년_빈입량: 880,
+                평년_금액: 2100000,
+                평년_빈입량: 840
+            },
+            {
+                name: '품목 C',
+                당해년_금액: 500000,
+                당해년_빈입량: 250,
+                전년_금액: 480000,
+                전년_빈입량: 240,
+                평년_금액: 460000,
+                평년_빈입량: 230
+            }
+        ];
+
+        // Function to format numbers with thousand separators
+        function formatNumber(num, decimals) {
+            if (decimals !== undefined) {
+                return num.toLocaleString('ko-KR', {
+                    minimumFractionDigits: decimals,
+                    maximumFractionDigits: decimals
+                });
+            }
+            return num.toLocaleString('ko-KR');
+        }
+
+        // Function to calculate unit price (단가)
+        function calculateUnitPrice(amount, quantity) {
+            if (quantity === 0 || quantity === null || quantity === undefined) {
+                return null;
+            }
+            return amount / quantity;
+        }
+
+        // Function to generate table
+        function generateTable(data) {
+            // Define column structure
+            const columns = [
+                { header: '품목', field: 'name', className: 'item-name', type: 'text' },
+                { header: '당해년 금액', field: '당해년_금액', className: 'amount-col', type: 'number' },
+                { header: '당해년 단가', field: '당해년_단가', className: 'price-col', type: 'calculated' },
+                { header: '당해년 빈입량', field: '당해년_빈입량', className: 'quantity-col', type: 'number' },
+                { header: '전년 금액', field: '전년_금액', className: 'amount-col', type: 'number' },
+                { header: '전년 단가', field: '전년_단가', className: 'price-col', type: 'calculated' },
+                { header: '전년 빈입량', field: '전년_빈입량', className: 'quantity-col', type: 'number' },
+                { header: '평년 금액', field: '평년_금액', className: 'amount-col', type: 'number' },
+                { header: '평년 단가', field: '평년_단가', className: 'price-col', type: 'calculated' },
+                { header: '평년 빈입량', field: '평년_빈입량', className: 'quantity-col', type: 'number' }
+            ];
+
+            // Create table element
+            let tableHTML = '<table>';
+            
+            // Create header row
+            tableHTML += '<thead><tr>';
+            columns.forEach(col => {
+                tableHTML += `<th class="${col.className}">${col.header}</th>`;
+            });
+            tableHTML += '</tr></thead>';
+
+            // Create data rows
+            tableHTML += '<tbody>';
+            data.forEach(row => {
+                // Calculate unit prices
+                const 당해년_단가 = calculateUnitPrice(row.당해년_금액, row.당해년_빈입량);
+                const 전년_단가 = calculateUnitPrice(row.전년_금액, row.전년_빈입량);
+                const 평년_단가 = calculateUnitPrice(row.평년_금액, row.평년_빈입량);
+
+                // Augment row data with calculated values
+                const augmentedRow = {
+                    ...row,
+                    당해년_단가: 당해년_단가,
+                    전년_단가: 전년_단가,
+                    평년_단가: 평년_단가
+                };
+
+                tableHTML += '<tr>';
+                columns.forEach(col => {
+                    const value = augmentedRow[col.field];
+                    let displayValue;
+                    
+                    if (col.type === 'text') {
+                        displayValue = value;
+                    } else if (col.type === 'calculated') {
+                        // Handle null values for unit price (division by zero)
+                        displayValue = value === null ? 'N/A' : formatNumber(value, 2);
+                    } else if (col.type === 'number') {
+                        displayValue = formatNumber(value);
+                    }
+                    
+                    tableHTML += `<td class="${col.className}">${displayValue}</td>`;
+                });
+                tableHTML += '</tr>';
+            });
+            tableHTML += '</tbody>';
+            tableHTML += '</table>';
+
+            // Insert table into container
+            document.getElementById('table-container').innerHTML = tableHTML;
+        }
+
+        // Generate table on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            generateTable(sampleData);
+        });
+    </script>
+</body>
+</html>
