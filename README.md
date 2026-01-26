@@ -145,10 +145,20 @@ ValidationResult duplicates = syncService.findDuplicatesSync(
 
 - **Spring Boot 3.1.5**: 애플리케이션 프레임워크
 - **Spring Data JPA**: 데이터 접근 계층
-- **QueryDSL 5.0.0**: 타입 안전 쿼리
+- **QueryDSL 5.1.0**: 타입 안전 쿼리
 - **H2 Database**: 인메모리 데이터베이스 (개발/테스트용)
 - **Lombok**: 보일러플레이트 코드 감소
 - **JUnit 5**: 테스트 프레임워크
+
+## 보안 (Security)
+
+QueryDSL 5.1.0에 알려진 HQL injection 취약점이 있습니다. 하지만 **본 구현은 안전합니다**:
+- ✅ 사용자 입력을 orderBy에 사용하지 않음
+- ✅ 모든 정렬은 정적이고 컴파일 타임에 정의됨
+- ✅ 타입 안전 쿼리 구성 사용
+- ✅ 모든 동적 입력은 파라미터화됨
+
+자세한 내용은 [SECURITY.md](SECURITY.md)를 참조하세요.
 
 ## 테스트 커버리지
 
