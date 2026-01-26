@@ -2,6 +2,8 @@
 
 이 프로젝트는 QueryDSL과 SQL 처리를 기반으로 한 데이터 동기화 및 로직 병합 구현을 제공합니다.
 
+> **⚠️ Security Notice**: 이 프로젝트는 QueryDSL 5.1.0을 사용하며, 알려진 HQL injection 취약점이 있습니다. 하지만 **본 구현은 안전합니다** (사용자 입력을 orderBy에 사용하지 않음). 자세한 내용은 [SECURITY.md](SECURITY.md)를 참조하세요. 패치 버전이 출시되는 즉시 업그레이드할 예정입니다.
+
 ## 주요 기능
 
 ### 1. 이중 구현 방식 (Dual Implementation)
