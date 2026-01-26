@@ -102,6 +102,8 @@ public class DataRelSqlRepository {
             sql.append(" AND ").append(String.join(" AND ", conditions));
         }
         
+        sql.append(" ORDER BY dr.priority DESC NULLS LAST, dr.created_at DESC");
+        
         Query query = entityManager.createNativeQuery(sql.toString(), DataRel.class);
         
         if (relType != null) {

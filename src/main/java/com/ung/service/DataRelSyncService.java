@@ -4,6 +4,8 @@ import com.ung.entity.DataRel;
 import com.ung.repository.DataRelQueryDslRepository;
 import com.ung.repository.DataRelRepository;
 import com.ung.repository.DataRelSqlRepository;
+import lombok.Builder;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -183,8 +185,8 @@ public class DataRelSyncService {
     /**
      * Validation result DTO
      */
-    @lombok.Data
-    @lombok.Builder
+    @Data
+    @Builder
     public static class ValidationResult {
         private List<DataRel> queryDslResults;
         private List<DataRel> sqlResults;
@@ -195,8 +197,8 @@ public class DataRelSyncService {
     /**
      * Consistency check result DTO
      */
-    @lombok.Data
-    @lombok.Builder
+    @Data
+    @Builder
     public static class ConsistencyCheckResult {
         private boolean queryDslValid;
         private boolean sqlValid;

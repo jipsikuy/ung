@@ -86,6 +86,7 @@ public class DataRelQueryDslRepository {
         return queryFactory
                 .selectFrom(qDataRel)
                 .where(builder)
+                .orderBy(qDataRel.priority.desc().nullsLast(), qDataRel.createdAt.desc())
                 .fetch();
     }
     
